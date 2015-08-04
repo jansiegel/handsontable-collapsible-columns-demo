@@ -1,0 +1,34 @@
+body {
+  max-width: 80em;
+  margin-left: auto;
+  margin-right: auto; }
+  body:after {
+    content: " ";
+    display: block;
+    clear: both; }
+
+nav {
+  width: 25%;
+  float: left;
+  margin-right: 5.26316%; }
+
+* {
+  font-family: "Open Sans", Tahoma, Arial;
+  box-sizing: border-box; }
+
+body {
+  background: #045ab0; }
+
+.handsontable {
+  font-weight: 100;
+  font-size: 10pt; }
+
+h1 {
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: -0.4px;
+  text-transform: uppercase;
+  color: #fff;
+  text-align: center; }
+
+/*# sourceMappingURL=main.css.map */

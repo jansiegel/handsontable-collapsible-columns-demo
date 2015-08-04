@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Collapsible columns plugin demo</title>
+
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Inconsolata' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" type="text/css" href="css/grid.css"/>
+  <link rel="stylesheet" type="text/css" href="css/main.css"/>
+
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/languages/javascript.min.js"></script>
+  <link rel="stylesheet" media="screen"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/default.min.css">
+  <link rel="stylesheet" media="screen" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.7/styles/zenburn.min.css">
+
+  <link rel="stylesheet" type="text/css" href="lib/handsontable.full.css"/>
+  <script src="lib/handsontable.full.js"></script>
+</head>
+<body>
+
+<div id="container">
+  <div id="header">
+    <h1>Collapsible columns plugin</h1>
+
+    <h2>demo</h2>
+  </div>
+  <div class="example-container">
+    <div id="example1"></div>
+    <script class="preview">
+      var example1 = document.querySelector('#example1'),
+          example1Hot;
+
+      example1Hot = new Handsontable(example1, {
+        data: Handsontable.helper.createSpreadsheetData(10, 10),
+        colHeaders: true,
+        hiddenColumns: true,
+        nestedHeaders: {
+          colHeaders: Handsontable.helper.createSpreadsheetData(4, 10),
+          colspan: [
+            [1, 8],
+            [1, 4, 4],
+            [1, 2, 2, 2, 2]
+          ],
+          overwriteHeaders: true
+        },
+        collapsibleColumns: true,
+        width: 500,
+        height: 400,
+        columnSorting: true,
+        sortIndicator: true
+      });
+    </script>
+  </div>
+  <div class="features">
+    <div class="name">Nested Headers</div>
+    <div class="description">
+      <p>
+        The <i>Nested Headers</i> functionality enables the option to create a "nested" structure inside the
+        Handsontable
+        headers. <br>
+        See the example configuration option structure:
+        <pre><code class="javascript preview hljs">
+    nestedHeaders: {
+        colHeaders: [
+            ['a', 'b', 'c'],
+            ['d', 'e', 'f']
+        ],
+        colspan: [
+            [1, 4, 1, 1],
+            [1, 2, 2],
+        ],
+        overwriteHeaders: true
+    }
+        </code></pre>
+      Where: <br>
+      <span class="hlite">nestedHeaders</span> is an Handsontable config item, provided as an object with the following options:
+      <ul>
+        <li><span class="hlite">colHeaders</span>: an array of arrays, consisting of the header content for the additional levels of headers.
+        <br>For example, to get the headers looking like this:
+          <pre><code>
+  | one   | two   | three |
+  | four  | five  | six   |
+  | seven | eight | nine  |
+            </code></pre>
+
+      The <span class="hlite">colHeaders</span> property should be declared as:
+      <pre><code class="javascript">
+  colHeaders: [
+      [ 'one', 'two', 'three' ],
+      [ 'four', 'five', 'six' ],
+      [ 'seven', 'eight', 'nine' ]
+  ]
+            </code></pre>
+
+
+        </li>
+        <li><span class="hlite">colspan</span>: an array of arrays, consisting of the <i>colspan</i> attributes
+          to be assigned for the "oversized" column headers.
+          <br>
+          For example, to get the headers looking like this:
+          <pre><code>
+  | one           | three |
+  | four  | five  | six   |
+  | seven | eight | nine  |
+          </code></pre>
+          The <span class="hlite">colHeaders</span> property should be declared as:
+      <pre><code class="javascript">
+  colspan: [
+      [2, 1],
+      [1, 1, 1],
+      [1, 1, 1]
+  ]
+      </code></pre>
+
+          or as
+
+      <pre><code class="javascript">
+  colspan: [
+    [2]
+  ]
+      </code></pre>
+        as <i>1</i> is the default value for the headers' colspan attribute, and doesn't have to be declared.
+        </li>
+        <li><span class="hlite">overwriteHeaders</span>: a boolean property, declaring whether the initially
+          declared (or default) column header values should be overwritten by those declared in the plugins.
+          <br><br>In other words, if this property set to <i>true</i>, and the HOT config is set as follows:
+          <pre><code>
+  hot = new Handsontable(element, {
+    data: dataObj,
+    colHeaders: true,
+    nestedHeaders: {
+        colHeaders: [
+            ['x', 'y', 'z'],
+            ['1', '2', '3']
+        ]
+        // ...
+    }
+    // ...
+  });
+          </code></pre>
+          The headers would look like this:
+  <pre><code>
+    | x | y | z |
+    | 1 | 2 | 3 |
+  </code></pre>
+  And with the <span class="hlite">overwriteHeaders</span> property set to <i>false</i>, they would look like this:
+  <pre><code>
+    | x | y | z |
+    | A | B | C |
+  </code></pre>
+  (as "A", "B", "C", etc are the default first-level column header values)
+        </li>
+      </ul>
+      </p>
+    </div>
+    <div class="break">&nbsp;</div>
+
+    <div class="name">Collapsible Columns</div>
+    <div class="description">
+      The <span class="hlite">collapsibleColumns</span> property (boolean) adds an option to collapse/expand the
+      "child" columns of the clicked column headers, if set to <i>true</i>. <br><br>
+      Setting it to <i>true</i> adds a collapse/expand clickable indicator. After clicking the indicator, all but the first
+      of the header "child" sections are collapsed. <br><br>
+      When clicked on an collapsed state, all of the "child" sections are expanded.
+    </div>
+
+  </div>
+</div>
+
+
+<script>
+  hljs.initHighlightingOnLoad();
+
+  function previewCode() {
+    var scripts = document.querySelectorAll('script.preview');
+    var divs = document.querySelectorAll('div.codeExample');
+    cloneScripts(scripts);
+    cloneScripts(divs);
+
+  }
+
+  function cloneScripts(scripts) {
+    for (var i = 0; i < scripts.length; i++) {
+      if (scripts[i].hasAttribute('src')) {
+        continue;
+      }
+
+      var pre = document.createElement('PRE');
+      var code = document.createElement('CODE');
+      code.className = 'javascript preview';
+      code.innerText = scripts[i].innerText || script[i].textContent;
+      pre.appendChild(code);
+
+      scripts[i].parentNode.insertBefore(pre, scripts[i]);
+    }
+  }
+
+  previewCode();
+
+</script>
+
+</body>
+</html>

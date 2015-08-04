@@ -1,0 +1,94 @@
+@import 'grid';
+
+$main-font-color: #fff;
+$main-font-family: "Open Sans", Tahoma, Arial;
+
+* {
+  font-family: $main-font-family;
+}
+
+body {
+  background: #045ab0;
+  color: #fff;
+}
+
+#container {
+  @include container;
+}
+
+#header {
+  @include span(12);
+  margin-bottom: 40px;
+}
+
+code {
+  font-family: Inconsolata, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.handsontable {
+  font-weight: 100;
+  font-size: 10pt;
+}
+
+h1:first-of-type {
+  margin-top: 20px;
+}
+
+h2:first-of-type {
+  margin-bottom: 20px;
+}
+
+h1, h2 {
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: -0.4px;
+  text-transform: uppercase;
+  color: $main-font-color;
+  text-align: center;
+  margin: 0;
+}
+
+h2 {
+  font-size: 20px;
+  margin: 0;
+  padding: 0;
+}
+
+.example-container {
+  @include span(12);
+}
+
+#example1 {
+  overflow: hidden;
+  margin: 0px auto;
+  color: #000;
+}
+
+.features {
+  margin-top: 30px;
+  color: #000;
+
+  .name {
+    @include span(4);
+    background: #fff;
+    padding: 20px;
+    font-weight: bold;
+  }
+
+  .description {
+    @include span(8 last);
+    background: #fff;
+    padding: 20px;
+  }
+}
+
+.break {
+  @include span(12 last);
+}
+
+.hlite {
+  color: #dcdcdc;
+  background: #3f3f3f;
+  padding: 0px 4px 0px 4px;
+}
+
