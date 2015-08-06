@@ -6,7 +6,7 @@
  * Licensed under the MIT license.
  * http://handsontable.com/
  *
- * Date: Tue Aug 04 2015 10:32:54 GMT+0200 (CEST)
+ * Date: Thu Aug 06 2015 12:35:56 GMT+0200 (CEST)
  */
 
 .handsontable {
@@ -908,6 +908,10 @@ thead .htCollapseButton:after {
 
 .handsontable col.hidden {
   width: 0px !important;
+}
+
+.handsontable table tr th.lightRightBorder {
+  border-right: 1px solid #E6E6E6;
 }
 
 .handsontable tr.hidden,
