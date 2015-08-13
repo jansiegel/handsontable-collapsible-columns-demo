@@ -38,15 +38,12 @@
         data: Handsontable.helper.createSpreadsheetData(10, 10),
         colHeaders: true,
         hiddenColumns: true,
-        nestedHeaders: {
-          colHeaders: Handsontable.helper.createSpreadsheetData(4, 10),
-          colspan: [
-            [1, 8],
-            [1, 4, 4],
-            [1, 2, 2, 2, 2]
-          ],
-          overwriteHeaders: true
-        },
+        nestedHeaders: [
+            ['A', {label: 'B', colspan: 8}, 'C'],
+            ['D', {label: 'E', colspan: 4}, {label: 'F', colspan: 4}, 'G'],
+            ['H', {label: 'I', colspan: 2}, {label: 'J', colspan: 2}, {label: 'K', colspan: 2}, {label: 'L', colspan: 2}, 'M'],
+            ['N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W']
+        ],
         collapsibleColumns: true,
         width: 500,
         height: 400,
@@ -64,32 +61,24 @@
         headers. <br>
         See the example configuration option structure:
         <pre><code class="javascript preview hljs">
-    nestedHeaders: {
-        colHeaders: [
-            ['a', 'b', 'c'],
-            ['d', 'e', 'f']
-        ],
-        colspan: [
-            [1, 4, 1, 1],
-            [1, 2, 2],
-        ],
-        overwriteHeaders: true
-    }
+    nestedHeaders: [
+            ['a', {label: 'b', colspan: 4}, 'c'],
+            ['d', {lable: 'e', colspan: 2}, {label: 'f', colspan: 2}]
+    ]
         </code></pre>
       Where: <br>
-      <span class="hlite">nestedHeaders</span> is an Handsontable config item, provided as an object with the following options:
+      <span class="hlite">nestedHeaders</span> is an Handsontable config item, provided as an array of arrays, containing the header and colspan data.
       <ul>
-        <li><span class="hlite">colHeaders</span>: an array of arrays, consisting of the header content for the additional levels of headers.
-        <br>For example, to get the headers looking like this:
+        <li>For example, to get the headers looking like this:
           <pre><code>
   | one   | two   | three |
   | four  | five  | six   |
   | seven | eight | nine  |
             </code></pre>
 
-      The <span class="hlite">colHeaders</span> property should be declared as:
+      The <span class="hlite">nestedHeaders</span> property should be declared as:
       <pre><code class="javascript">
-  colHeaders: [
+  nestedHeaders: [
       [ 'one', 'two', 'three' ],
       [ 'four', 'five', 'six' ],
       [ 'seven', 'eight', 'nine' ]
@@ -98,8 +87,8 @@
 
 
         </li>
-        <li><span class="hlite">colspan</span>: an array of arrays, consisting of the <i>colspan</i> attributes
-          to be assigned for the "oversized" column headers.
+        <li>To make any header wider (covering multiple table columns), it's corresponding array element should be provided as an object
+          with <span class="hlite">label</span> and <span class="hlite">colspan</span> properties.
           <br>
           For example, to get the headers looking like this:
           <pre><code>
@@ -107,52 +96,14 @@
   | four  | five  | six   |
   | seven | eight | nine  |
           </code></pre>
-          The <span class="hlite">colHeaders</span> property should be declared as:
+          The <span class="hlite">nestedHeaders</span> property should be declared as:
       <pre><code class="javascript">
-  colspan: [
-      [2, 1],
-      [1, 1, 1],
-      [1, 1, 1]
+  nestedHeaders: [
+      [ {label: 'one', colspan: 2}, 'two', 'three' ],
+      [ 'four', 'five', 'six' ],
+      [ 'seven', 'eight', 'nine' ]
   ]
       </code></pre>
-
-          or as
-
-      <pre><code class="javascript">
-  colspan: [
-    [2]
-  ]
-      </code></pre>
-        as <i>1</i> is the default value for the headers' colspan attribute, and doesn't have to be declared.
-        </li>
-        <li><span class="hlite">overwriteHeaders</span>: a boolean property, declaring whether the initially
-          declared (or default) column header values should be overwritten by those declared in the plugins.
-          <br><br>In other words, if this property set to <i>true</i>, and the HOT config is set as follows:
-          <pre><code>
-  hot = new Handsontable(element, {
-    data: dataObj,
-    colHeaders: true,
-    nestedHeaders: {
-        colHeaders: [
-            ['x', 'y', 'z'],
-            ['1', '2', '3']
-        ]
-        // ...
-    }
-    // ...
-  });
-          </code></pre>
-          The headers would look like this:
-  <pre><code>
-    | x | y | z |
-    | 1 | 2 | 3 |
-  </code></pre>
-  And with the <span class="hlite">overwriteHeaders</span> property set to <i>false</i>, they would look like this:
-  <pre><code>
-    | x | y | z |
-    | A | B | C |
-  </code></pre>
-  (as "A", "B", "C", etc are the default first-level column header values)
         </li>
       </ul>
       </p>
@@ -161,11 +112,21 @@
 
     <div class="name">Collapsible Columns</div>
     <div class="description">
-      The <span class="hlite">collapsibleColumns</span> property (boolean) adds an option to collapse/expand the
-      "child" columns of the clicked column headers, if set to <i>true</i>. <br><br>
-      Setting it to <i>true</i> adds a collapse/expand clickable indicator. After clicking the indicator, all but the first
-      of the header "child" sections are collapsed. <br><br>
-      When clicked on an collapsed state, all of the "child" sections are expanded.
+      The <span class="hlite">collapsibleColumns</span> property adds an option to collapse/expand the
+      "child" columns of the clicked column headers, if set to <i>true</i>.<br>
+      If only some headers should have the "collapse" functionality,
+      the <span class="hlite">collapsibleColumns</span> property can be declared as an array of objects, see the example below:
+         <pre><code class="javascript">
+   collapsibleColumns: [
+      {row: -4, col: 1, collapsible: true},
+      {row: -3, col: 5, collapsible: true}
+   ]
+         </code></pre>
+
+      <br><br>
+      Setting the property to <i>true</i> (or setting an "collapsible: true" property on the object) adds a collapse/expand clickable indicator to the headers.
+      After clicking the indicator, all but the first of the header's "child" sections are collapsed. <br><br>
+      When clicked on an collapsed state of the button, all of the "child" sections are expanded.
     </div>
 
   </div>
